@@ -1,5 +1,6 @@
 package com.example.sambal.quicknews;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebChromeClient;
@@ -9,8 +10,9 @@ import android.webkit.WebViewClient;
 import dmax.dialog.SpotsDialog;
 
 public class DetailArticle extends AppCompatActivity {
+
     WebView webView;
-    SpotsDialog dialog;
+    AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,26 +21,24 @@ public class DetailArticle extends AppCompatActivity {
 
         dialog = new SpotsDialog(this);
         dialog.show();
-        //webView
-        webView = findViewById(R.id.webView);
+        //WebView
+        webView = (WebView)findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new WebChromeClient());
-        webView.setWebViewClient(new WebViewClient()
-        {
+        webView.setWebViewClient(new WebViewClient(){
+
+            //press Ctrl+O
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 dialog.dismiss();
             }
         });
 
-        if (getIntent() != null)
+        if(getIntent() != null)
         {
-
-            if (!getIntent().getStringExtra("webURL").isEmpty())
+            if(!getIntent().getStringExtra("webURL").isEmpty())
                 webView.loadUrl(getIntent().getStringExtra("webURL"));
-
         }
-
-
     }
 }

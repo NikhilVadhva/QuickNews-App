@@ -19,7 +19,8 @@
             android:layout_weight="2"
             android:scaleType="centerCrop"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:src="@drawable/newsicon" />
 
         <TextView
             android:layout_gravity="center_vertical"

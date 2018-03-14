@@ -27,98 +27,103 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     NewsService mService;
     ListSourceAdapter adapter;
-    SpotsDialog dialog;
-    SwipeRefreshLayout swipeRefreshLayout;
+    android.app.AlertDialog dialog;
+    SwipeRefreshLayout swipeLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Init Cache
+        //Init cache
         Paper.init(this);
-
-        swipeRefreshLayout = findViewById(R.id.swipRefreshLayout);
-        swipeRefreshLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadWebsiteSource(true);
-            }
-        });
 
         //Init Service
         mService = Common.getNewsService();
 
-        //Init view
-        listWebsite = findViewById(R.id.list_source);
+        //Init View
+        swipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipRefreshLayout);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadWebsiteSource(true);
+            }
+        });
+
+        listWebsite = (RecyclerView)findViewById(R.id.list_source);
         listWebsite.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         listWebsite.setLayoutManager(layoutManager);
 
         dialog = new SpotsDialog(this);
 
-
         loadWebsiteSource(false);
 
     }
 
     private void loadWebsiteSource(boolean isRefreshed) {
-        if (!isRefreshed){
+        if(!isRefreshed)
+        {
+
             String cache = Paper.book().read("cache");
-            if (cache != null && !cache.isEmpty()) //if have cache
+            if(cache != null && !cache.isEmpty() && !cache.equals("null")) // If have cache
             {
-                WebSite webSite = new Gson().fromJson(cache, WebSite.class); //Convert cache from Json to Object
-                adapter = new ListSourceAdapter(getBaseContext(), webSite);
+                WebSite website = new Gson().fromJson(cache,WebSite.class); // Convert cache from Json to Object
+                adapter = new ListSourceAdapter(getBaseContext(),website);
                 adapter.notifyDataSetChanged();
                 listWebsite.setAdapter(adapter);
             }
-            else //If not have cache
+            else // If not have cache
             {
                 dialog.show();
-                //fetch new data
+                //Fetch new data
                 mService.getSources().enqueue(new Callback<WebSite>() {
                     @Override
                     public void onResponse(Call<WebSite> call, Response<WebSite> response) {
-                        adapter = new ListSourceAdapter(getBaseContext(), response.body());
+                        adapter  = new ListSourceAdapter(getBaseContext(),response.body());
                         adapter.notifyDataSetChanged();
                         listWebsite.setAdapter(adapter);
 
-                        //save to cache
-                        Paper.book().write("cache", new Gson().toJson(response.body()));
+                        //Save to cache
+                        Paper.book().write("cache",new Gson().toJson(response.body()));
+
+                        dialog.dismiss();
+
                     }
 
                     @Override
                     public void onFailure(Call<WebSite> call, Throwable t) {
 
-
                     }
                 });
             }
         }
-        else //If from Swipe to Refresh
+        else // If from Swipe to Refresh
         {
-            dialog.show();
-            //fetch new data
+
+            swipeLayout.setRefreshing(true);
+            //Fetch new data
             mService.getSources().enqueue(new Callback<WebSite>() {
                 @Override
                 public void onResponse(Call<WebSite> call, Response<WebSite> response) {
-                    adapter = new ListSourceAdapter(getBaseContext(), response.body());
+                    adapter  = new ListSourceAdapter(getBaseContext(),response.body());
                     adapter.notifyDataSetChanged();
                     listWebsite.setAdapter(adapter);
 
-                    //save to cache
-                    Paper.book().write("cache", new Gson().toJson(response.body()));
+                    //Save to cache
+                    Paper.book().write("cache",new Gson().toJson(response.body()));
 
-                    //dismiss refresh progressing
-                    swipeRefreshLayout.setRefreshing(false);
-
+                    //Dismiss refresh progressring
+                    swipeLayout.setRefreshing(false);
                 }
 
                 @Override
                 public void onFailure(Call<WebSite> call, Throwable t) {
 
-
                 }
             });
+
         }
     }
 }

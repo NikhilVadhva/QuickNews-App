@@ -1,5 +1,6 @@
 package com.example.sambal.quicknews;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,17 +28,19 @@ import retrofit2.Response;
 
 public class ListNews extends AppCompatActivity {
 
-    KenBurnsView kenBurnsView;
+    KenBurnsView kbv;
     DiagonalLayout diagonalLayout;
-    SpotsDialog dialog;
+    AlertDialog dialog;
     NewsService mService;
-    TextView top_author, top_title;
+    TextView top_author,top_title;
     SwipeRefreshLayout swipeRefreshLayout;
 
-    String source = "", sort_by = "", webHotURL= "";
+    String source="",sortBy="",webHotURL="";
+
     ListNewsAdapter adapter;
     RecyclerView lstNews;
     RecyclerView.LayoutManager layoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,57 +53,48 @@ public class ListNews extends AppCompatActivity {
         dialog = new SpotsDialog(this);
 
         //View
-        swipeRefreshLayout = findViewById(R.id.swipRefreshLayout);
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadNews(source, true);
+                loadNews(source,true);
             }
         });
 
-        diagonalLayout = findViewById(R.id.diagonalLayout);
+        diagonalLayout = (DiagonalLayout)findViewById(R.id.diagonalLayout);
         diagonalLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent detail = new Intent(getBaseContext(), DetailArticle.class);
-                detail.putExtra("webURL", webHotURL);
+                Intent detail = new Intent(getBaseContext(),DetailArticle.class);
+                detail.putExtra("webURL",webHotURL);
                 startActivity(detail);
             }
         });
-        kenBurnsView = findViewById(R.id.top_Image);
-        top_author = findViewById(R.id.top_author);
-        top_title = findViewById(R.id.top_title);
+        kbv = (KenBurnsView)findViewById(R.id.top_Image);
+        top_author = (TextView)findViewById(R.id.top_author);
+        top_title = (TextView)findViewById(R.id.top_title);
 
-        lstNews = findViewById(R.id.listNews);
+        lstNews = (RecyclerView)findViewById(R.id.listNews);
         lstNews.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         lstNews.setLayoutManager(layoutManager);
 
-
         //Intent
-        if (getIntent() != null)
+        if(getIntent() != null)
         {
             source = getIntent().getStringExtra("source");
-            sort_by = getIntent().getStringExtra("sortBy");
-            try {
-
-                if (!source.isEmpty() && !sort_by.isEmpty()) {
-                    loadNews(source, false);
-                }
-            }
-            catch (Exception e)
+            if(!source.isEmpty())
             {
-
+                loadNews(source,false);
             }
-
         }
     }
 
     private void loadNews(String source, boolean isRefreshed) {
-        if (!isRefreshed)
+        if(!isRefreshed)
         {
             dialog.show();
-            mService.getNewestArticle(Common.getAPIURL(source, sort_by, Common.API_KEY))
+            mService.getNewestArticle(Common.getAPIURL(source,sortBy,Common.API_KEY))
                     .enqueue(new Callback<News>() {
                         @Override
                         public void onResponse(Call<News> call, Response<News> response) {
@@ -108,7 +102,7 @@ public class ListNews extends AppCompatActivity {
                             //Get first article
                             Picasso.with(getBaseContext())
                                     .load(response.body().getArticles().get(0).getUrlToImage())
-                                    .into(kenBurnsView);
+                                    .into(kbv);
 
                             top_title.setText(response.body().getArticles().get(0).getTitle());
                             top_author.setText(response.body().getArticles().get(0).getAuthor());
@@ -116,10 +110,11 @@ public class ListNews extends AppCompatActivity {
                             webHotURL = response.body().getArticles().get(0).getUrl();
 
                             //Load remain articles
-                            List<Article> removeFirstItem = response.body().getArticles();
-
-                            removeFirstItem.remove(0);
-                            adapter = new ListNewsAdapter(removeFirstItem, getBaseContext());
+                            List<Article> removeFristItem = response.body().getArticles();
+                            //Because we already load first item to show on Diagonal Layout
+                            //So we need remove it
+                            removeFristItem.remove(0);
+                            adapter = new ListNewsAdapter(removeFristItem,getBaseContext());
                             adapter.notifyDataSetChanged();
                             lstNews.setAdapter(adapter);
 
@@ -134,7 +129,7 @@ public class ListNews extends AppCompatActivity {
         else
         {
             dialog.show();
-            mService.getNewestArticle(Common.getAPIURL(source, sort_by, Common.API_KEY))
+            mService.getNewestArticle(Common.getAPIURL(source,sortBy,Common.API_KEY))
                     .enqueue(new Callback<News>() {
                         @Override
                         public void onResponse(Call<News> call, Response<News> response) {
@@ -142,7 +137,7 @@ public class ListNews extends AppCompatActivity {
                             //Get first article
                             Picasso.with(getBaseContext())
                                     .load(response.body().getArticles().get(0).getUrlToImage())
-                                    .into(kenBurnsView);
+                                    .into(kbv);
 
                             top_title.setText(response.body().getArticles().get(0).getTitle());
                             top_author.setText(response.body().getArticles().get(0).getAuthor());
@@ -150,10 +145,11 @@ public class ListNews extends AppCompatActivity {
                             webHotURL = response.body().getArticles().get(0).getUrl();
 
                             //Load remain articles
-                            List<Article> removeFirstItem = response.body().getArticles();
-
-                            removeFirstItem.remove(0);
-                            adapter = new ListNewsAdapter(removeFirstItem, getBaseContext());
+                            List<Article> removeFristItem = response.body().getArticles();
+                            //Because we already load first item to show on Diagonal Layout
+                            //So we need remove it
+                            removeFristItem.remove(0);
+                            adapter = new ListNewsAdapter(removeFristItem,getBaseContext());
                             adapter.notifyDataSetChanged();
                             lstNews.setAdapter(adapter);
 

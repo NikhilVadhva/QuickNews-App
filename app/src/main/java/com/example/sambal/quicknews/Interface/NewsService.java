@@ -1,5 +1,6 @@
 package com.example.sambal.quicknews.Interface;
 
+import com.example.sambal.quicknews.Common.Common;
 import com.example.sambal.quicknews.Model.News;
 import com.example.sambal.quicknews.Model.WebSite;
 
@@ -13,7 +14,7 @@ import retrofit2.http.Url;
 
 public interface NewsService {
 
-    @GET("v1/sources?language=en")
+    @GET("v2/sources?language=en&apiKey="+ Common.API_KEY)
     Call<WebSite> getSources();
 
     @GET

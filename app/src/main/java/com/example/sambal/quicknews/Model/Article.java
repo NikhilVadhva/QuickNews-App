@@ -1,12 +1,11 @@
 package com.example.sambal.quicknews.Model;
 
 /**
- * Created by Sambal on 1/18/2018.
+ * Created by reale on 10/4/2017.
  */
 
 public class Article {
-
-    private String author, title, description, url, urlToImage, publishedAt;
+    private String author,title,description,url,urlToImage,publishedAt;
 
     public String getAuthor() {
         return author;

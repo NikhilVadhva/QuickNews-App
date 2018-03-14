@@ -1,13 +1,11 @@
 package com.example.sambal.quicknews.Model;
 
-import java.util.List;
-
 /**
- * Created by Sambal on 1/5/2018.
+ * Created by reale on 10/4/2017.
  */
 
 class UrlsToLogos{
-    private String small, medium, large;
+    private String small,medium,large;
 
     public String getSmall() {
         return small;
@@ -33,17 +31,21 @@ class UrlsToLogos{
         this.large = large;
     }
 }
-public class Source {
 
-    private String id, name, description, url, category, language, country;
-    private UrlsToLogos UrlsToLogos;
-    private List<String> SortBysAvailable;
+public class Source {
+    private String id;
+    private String name;
+    private String description;
+    private String url;
+    private String category;
+    private String language;
+    private String country;
+
 
     public Source() {
     }
 
-    public Source(String id, String name, String description, String url, String category, String language, String country, com.example.sambal.quicknews.Model.UrlsToLogos urlsToLogos, List<String> sortBysAvailable) {
-
+    public Source(String id, String name, String description, String url, String category, String language, String country) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -51,9 +53,6 @@ public class Source {
         this.category = category;
         this.language = language;
         this.country = country;
-        UrlsToLogos = urlsToLogos;
-        SortBysAvailable = sortBysAvailable;
-
     }
 
     public String getId() {
@@ -112,19 +111,5 @@ public class Source {
         this.country = country;
     }
 
-    public com.example.sambal.quicknews.Model.UrlsToLogos getUrlsToLogos() {
-        return UrlsToLogos;
-    }
 
-    public void setUrlsToLogos(com.example.sambal.quicknews.Model.UrlsToLogos urlsToLogos) {
-        UrlsToLogos = urlsToLogos;
-    }
-
-    public List<String> getSortBysAvailable() {
-        return SortBysAvailable;
-    }
-
-    public void setSortBysAvailable(List<String> sortBysAvailable) {
-        SortBysAvailable = sortBysAvailable;
-    }
 }

@@ -3,18 +3,17 @@ package com.example.sambal.quicknews.Model;
 import java.util.List;
 
 /**
- * Created by Sambal on 1/5/2018.
+ * Created by reale on 10/4/2017.
  */
 
 public class WebSite {
-
     private String status;
-    private List<com.example.sambal.quicknews.Model.Source> sources;
+    private List<Source> sources;
 
     public WebSite() {
     }
 
-    public WebSite(String status, List<com.example.sambal.quicknews.Model.Source> sources) {
+    public WebSite(String status, List<Source> sources) {
         this.status = status;
         this.sources = sources;
     }
@@ -27,7 +26,7 @@ public class WebSite {
         this.status = status;
     }
 
-    public List<com.example.sambal.quicknews.Model.Source> getSources() {
+    public List<Source> getSources() {
         return sources;
     }
 

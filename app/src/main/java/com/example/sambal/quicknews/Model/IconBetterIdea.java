@@ -5,7 +5,7 @@ package com.example.sambal.quicknews.Model;
 import java.util.List;
 
 /**
- * Created by Sambal on 1/6/2018.
+ * Created by reale on 10/4/2017.
  */
 
 public class IconBetterIdea {
