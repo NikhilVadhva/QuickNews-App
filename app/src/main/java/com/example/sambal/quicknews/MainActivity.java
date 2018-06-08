@@ -1,5 +1,9 @@
 package com.example.sambal.quicknews;
 
+
+ // Updated Crash fixes in my app as on 8th June, 2018.
+
+
 import android.provider.ContactsContract;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
