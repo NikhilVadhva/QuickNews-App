@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.sambal.quicknews"
         minSdkVersion 19
@@ -21,14 +21,11 @@ android {
 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     //Add Library
-
-
     compile 'com.github.florent37:diagonallayout:1.0.7'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
     compile 'com.github.curioustechizen.android-ago:library:1.3.4'
@@ -44,6 +41,4 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'io.paperdb:paperdb:2.5'
     testCompile 'junit:junit:4.12'
-
-
 }

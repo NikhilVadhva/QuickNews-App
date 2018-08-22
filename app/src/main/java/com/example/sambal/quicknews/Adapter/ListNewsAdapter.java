@@ -90,7 +90,13 @@ public class ListNewsAdapter extends RecyclerView.Adapter<ListNewsViewHolder> {
 
             }
 
-            holder.article_time.setReferenceTime(date.getTime());
+            try {
+                holder.article_time.setReferenceTime(date.getTime());
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
 
         //Set Event Click
